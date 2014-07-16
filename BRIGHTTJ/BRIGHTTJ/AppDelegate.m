@@ -22,6 +22,7 @@
     UINavigationController *navControlelr = [[UINavigationController alloc] initWithRootViewController:homePageTVC];
     [navControlelr.navigationBar setBackgroundImage:[UIImage imageNamed:@"background_title,jpg"] forBarMetrics:UIBarMetricsDefault];
     navControlelr.navigationBar.translucent = YES;
+    navControlelr.navigationBar.tintColor = [UIColor colorWithRed:(226/255.0) green:(101/255.0) blue:(64/255.0) alpha:1];
     [homePageTVC release];
     
     self.window.rootViewController = navControlelr;

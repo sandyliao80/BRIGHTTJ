@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NetworkConnectionDelegate.h"
 
 @interface NetworkConnection : NSObject
 
-+ (NSURLRequest *)POSTURLRequestWithParameters:(NSDictionary *)parameters urlWithString:(NSString *)string;
-+ (id)JSONObjectWithData:(NSData *)data;
+@property (nonatomic, assign) id<NetworkConnectionDelegate> delegate;
+@property (nonatomic, retain) NSString *urlString;
+
+- (void)asynchronousPOSTRequertWithParameters:(NSDictionary *)paramters;
 
 @end

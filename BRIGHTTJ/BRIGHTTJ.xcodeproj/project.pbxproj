@@ -23,6 +23,15 @@
 		2459A9E419764D7F0068F50C /* background_title.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9DE19764D7F0068F50C /* background_title.jpg */; };
 		2459A9E519764D7F0068F50C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9DF19764D7F0068F50C /* icon.png */; };
 		2459A9E619764D7F0068F50C /* NetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2459A9E219764D7F0068F50C /* NetworkConnection.m */; };
+		2459A9ED19766F890068F50C /* CustomTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2459A9EC19766F890068F50C /* CustomTableViewCell.m */; };
+		2459A9F0197689530068F50C /* Post.m in Sources */ = {isa = PBXBuildFile; fileRef = 2459A9EF197689530068F50C /* Post.m */; };
+		2459A9F419769A670068F50C /* post_author.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9F119769A670068F50C /* post_author.png */; };
+		2459A9F519769A670068F50C /* post_date.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9F219769A670068F50C /* post_date.png */; };
+		2459A9F619769A670068F50C /* post_views.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9F319769A670068F50C /* post_views.png */; };
+		2459A9F91976A3910068F50C /* UIColor+Expand.m in Sources */ = {isa = PBXBuildFile; fileRef = 2459A9F81976A3910068F50C /* UIColor+Expand.m */; };
+		2459A9FC1976A6B20068F50C /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9FA1976A6B20068F50C /* menu.png */; };
+		2459A9FD1976A6B20068F50C /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = 2459A9FB1976A6B20068F50C /* share.png */; };
+		2459AA011976AA960068F50C /* PostDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2459AA001976AA960068F50C /* PostDetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +67,20 @@
 		2459A9DF19764D7F0068F50C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		2459A9E119764D7F0068F50C /* NetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
 		2459A9E219764D7F0068F50C /* NetworkConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkConnection.m; sourceTree = "<group>"; };
+		2459A9EA197667AD0068F50C /* NetworkConnectionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkConnectionDelegate.h; sourceTree = "<group>"; };
+		2459A9EB19766F890068F50C /* CustomTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTableViewCell.h; sourceTree = "<group>"; };
+		2459A9EC19766F890068F50C /* CustomTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTableViewCell.m; sourceTree = "<group>"; };
+		2459A9EE197689530068F50C /* Post.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Post.h; sourceTree = "<group>"; };
+		2459A9EF197689530068F50C /* Post.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Post.m; sourceTree = "<group>"; };
+		2459A9F119769A670068F50C /* post_author.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_author.png; sourceTree = "<group>"; };
+		2459A9F219769A670068F50C /* post_date.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_date.png; sourceTree = "<group>"; };
+		2459A9F319769A670068F50C /* post_views.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post_views.png; sourceTree = "<group>"; };
+		2459A9F71976A3910068F50C /* UIColor+Expand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Expand.h"; sourceTree = "<group>"; };
+		2459A9F81976A3910068F50C /* UIColor+Expand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Expand.m"; sourceTree = "<group>"; };
+		2459A9FA1976A6B20068F50C /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
+		2459A9FB1976A6B20068F50C /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
+		2459A9FF1976AA960068F50C /* PostDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostDetailViewController.h; sourceTree = "<group>"; };
+		2459AA001976AA960068F50C /* PostDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,11 +141,12 @@
 			isa = PBXGroup;
 			children = (
 				2459A9DA19764D7F0068F50C /* HomePage */,
-				2459A9DD19764D7F0068F50C /* Images */,
+				2459A9FE1976AA7F0068F50C /* PostDetail */,
 				2459A9E019764D7F0068F50C /* Tools */,
 				2459A9BA19764D480068F50C /* AppDelegate.h */,
 				2459A9BB19764D480068F50C /* AppDelegate.m */,
 				2459A9BD19764D480068F50C /* Images.xcassets */,
+				2459A9DD19764D7F0068F50C /* Images */,
 				2459A9B219764D480068F50C /* Supporting Files */,
 			);
 			path = BRIGHTTJ;
@@ -162,6 +186,10 @@
 			children = (
 				2459A9DB19764D7F0068F50C /* HomePageTableViewController.h */,
 				2459A9DC19764D7F0068F50C /* HomePageTableViewController.m */,
+				2459A9EB19766F890068F50C /* CustomTableViewCell.h */,
+				2459A9EC19766F890068F50C /* CustomTableViewCell.m */,
+				2459A9EE197689530068F50C /* Post.h */,
+				2459A9EF197689530068F50C /* Post.m */,
 			);
 			path = HomePage;
 			sourceTree = "<group>";
@@ -169,6 +197,11 @@
 		2459A9DD19764D7F0068F50C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2459A9FA1976A6B20068F50C /* menu.png */,
+				2459A9FB1976A6B20068F50C /* share.png */,
+				2459A9F119769A670068F50C /* post_author.png */,
+				2459A9F219769A670068F50C /* post_date.png */,
+				2459A9F319769A670068F50C /* post_views.png */,
 				2459A9DE19764D7F0068F50C /* background_title.jpg */,
 				2459A9DF19764D7F0068F50C /* icon.png */,
 			);
@@ -180,8 +213,20 @@
 			children = (
 				2459A9E119764D7F0068F50C /* NetworkConnection.h */,
 				2459A9E219764D7F0068F50C /* NetworkConnection.m */,
+				2459A9EA197667AD0068F50C /* NetworkConnectionDelegate.h */,
+				2459A9F71976A3910068F50C /* UIColor+Expand.h */,
+				2459A9F81976A3910068F50C /* UIColor+Expand.m */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		2459A9FE1976AA7F0068F50C /* PostDetail */ = {
+			isa = PBXGroup;
+			children = (
+				2459A9FF1976AA960068F50C /* PostDetailViewController.h */,
+				2459AA001976AA960068F50C /* PostDetailViewController.m */,
+			);
+			path = PostDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,10 +304,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2459A9FC1976A6B20068F50C /* menu.png in Resources */,
+				2459A9FD1976A6B20068F50C /* share.png in Resources */,
 				2459A9E519764D7F0068F50C /* icon.png in Resources */,
 				2459A9B619764D480068F50C /* InfoPlist.strings in Resources */,
+				2459A9F419769A670068F50C /* post_author.png in Resources */,
 				2459A9E419764D7F0068F50C /* background_title.jpg in Resources */,
 				2459A9BE19764D480068F50C /* Images.xcassets in Resources */,
+				2459A9F619769A670068F50C /* post_views.png in Resources */,
+				2459A9F519769A670068F50C /* post_date.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,8 +332,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2459A9E619764D7F0068F50C /* NetworkConnection.m in Sources */,
+				2459A9F91976A3910068F50C /* UIColor+Expand.m in Sources */,
+				2459A9F0197689530068F50C /* Post.m in Sources */,
 				2459A9E319764D7F0068F50C /* HomePageTableViewController.m in Sources */,
 				2459A9BC19764D480068F50C /* AppDelegate.m in Sources */,
+				2459AA011976AA960068F50C /* PostDetailViewController.m in Sources */,
+				2459A9ED19766F890068F50C /* CustomTableViewCell.m in Sources */,
 				2459A9B819764D480068F50C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
