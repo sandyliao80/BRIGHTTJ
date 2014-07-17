@@ -32,7 +32,7 @@
     
     NetworkConnection *connection = [[NetworkConnection alloc] init];
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    [connection asynchronousPOSTRequertWithParameters:nil];
+    [connection asynchronousPOSTRequert];
     connection.delegate = self;
 }
 

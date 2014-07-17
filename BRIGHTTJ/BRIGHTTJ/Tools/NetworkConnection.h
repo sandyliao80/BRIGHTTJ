@@ -11,9 +11,10 @@
 
 @interface NetworkConnection : NSObject
 
-@property (nonatomic, assign) id<NetworkConnectionDelegate> delegate;
-@property (nonatomic, retain) NSString *urlString;
+@property (nonatomic, assign) id<NetworkConnectionDelegate> delegate; // NetworkConnecionDelegate
+@property (nonatomic, retain) NSString *urlString; // request url string
+@property (nonatomic, retain) NSDictionary *postData; // post data
 
-- (void)asynchronousPOSTRequertWithParameters:(NSDictionary *)paramters;
+- (void)asynchronousPOSTRequert; // send request with post method
 
 @end

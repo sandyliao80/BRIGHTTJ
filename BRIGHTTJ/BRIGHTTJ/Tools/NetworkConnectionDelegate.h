@@ -10,6 +10,8 @@
 
 @protocol NetworkConnectionDelegate <NSObject>
 
+// trigger this event when network connection finish loading
+// to ask the requester update user interface with response data
 - (void)updateUserInterfaceWithData:(NSDictionary *)data;
 
 @end

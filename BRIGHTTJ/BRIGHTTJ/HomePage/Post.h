@@ -10,10 +10,10 @@
 
 @interface Post : NSObject
 
-@property (nonatomic, retain) NSString *postID;
-@property (nonatomic, retain) NSString *postTitle;
-@property (nonatomic, retain) NSString *postDate;
-@property (nonatomic, retain) NSString *postViews;
-@property (nonatomic, retain) NSString *postAuthor;
+@property (nonatomic, retain) NSString *postID; // post id
+@property (nonatomic, retain) NSString *postTitle; // post title
+@property (nonatomic, retain) NSString *postDate; // post date
+@property (nonatomic, retain) NSString *postViews; // post views
+@property (nonatomic, retain) NSString *postAuthor; // post author
 
 @end

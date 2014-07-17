@@ -6,6 +6,12 @@
 //  Copyright (c) 2014年 brighttj. All rights reserved.
 //
 
+/*
+    
+ home page user interface and logical code.
+ 
+ */
+
 #import "HomePageTableViewController.h"
 #import "NetworkConnection.h"
 #import "NetworkConnectionDelegate.h"
@@ -29,6 +35,11 @@
 
 @implementation HomePageTableViewController
 
+/**
+ *  rewitre init method
+ *
+ *  @return already initializied object
+ */
 - (id)init {
     
     self = [super init];
@@ -52,23 +63,40 @@
 {
     [super viewDidLoad];
     
+    // initialize data source
     [self initializeDataSource];
+    // initailize user interface
     [self initializeUserInterface];
 }
 
+/**
+ *  initialize date source
+ */
 - (void)initializeDataSource {
     
+    // initialize network connection
     NetworkConnection *connection = [[NetworkConnection alloc] init];
+    // set request url
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    [connection asynchronousPOSTRequertWithParameters:nil];
+    // set connection data
+    connection.postData = nil;
+    // send request with post method
+    [connection asynchronousPOSTRequert];
+    // set NetworkConnectionDelegate delegate
     connection.delegate = self;
 }
 
+/**
+ *  initialize user interface
+ */
 - (void)initializeUserInterface {
     
+    // register custom cell with cell identifier
     [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:CELL_IDENTIFIER];
+    // set table row height
     self.tableView.rowHeight = 80;
     
+    // initialize category list bar button with image "menu.png"
     UIBarButtonItem *categoryListButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
@@ -76,7 +104,8 @@
     self.navigationItem.leftBarButtonItem = categoryListButton;
     [categoryListButton release];
     
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"]
+    // initialize category list bar button with image "more.png"
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(barButtonItemPressed:)];
@@ -84,6 +113,11 @@
     [shareButton release];
 }
 
+/**
+ *  bar button trigger event
+ *
+ *  @param sender : the bar button who is trigger this event
+ */
 - (void)barButtonItemPressed:(UIBarButtonItem *)sender {
     
     
@@ -91,8 +125,14 @@
 
 #pragma mark - NetworkConnectionDelegate methods
 
+/**
+ *  update user interface untill connection has response
+ *
+ *  @param data : response data
+ */
 - (void)updateUserInterfaceWithData:(NSDictionary *)data {
     
+    // package data in post object
     for (int i = 0; i < [data allKeys].count; i ++) {
         
         Post *post = [[Post alloc] init];
@@ -101,8 +141,8 @@
         post.postAuthor = [[data objectForKey:POST_ID(i)] objectForKey:@"post_author"];
         post.postDate = [[data objectForKey:POST_ID(i)] objectForKey:@"post_date"];
         post.postViews = [[data objectForKey:POST_ID(i)] objectForKey:@"post_views"];
+        // add post into _dataSource
         [_dataSource addObject:post];
-        NSLog(@"%@", post.postDate);
         [post release];
     }
     [self.tableView reloadData];
@@ -111,12 +151,27 @@
 
 #pragma mark - Table view data source
 
+/**
+ *  set the number of sections
+ *
+ *  @param tableView : the tableview who is trigger this event
+ *
+ *  @return the number of sections
+ */
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
+
     return 1;
 }
 
+/**
+ *  set the number of rows in the section
+ *
+ *  @param tableView : the tableview who is trigger this event
+ *  @param section   : the section who would set row
+ *
+ *  @return the number of rows in the section
+ */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     
@@ -126,23 +181,45 @@
 
 #pragma mark - UITableViewDelegate methods
 
+/**
+ *  set the content of cell
+ *
+ *  @param tableView : the tableview who is trigger this event
+ *  @param indexPath : the tableview index
+ *
+ *  @return already set cell
+ */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    // initialize custom cell
     CustomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER];
+    // set cell text
     cell.titleLabel.text = ((Post *)_dataSource[indexPath.row]).postTitle;
     cell.authorLabel.text = ((Post *)_dataSource[indexPath.row]).postAuthor;
     cell.viewsLabel.text = ((Post *)_dataSource[indexPath.row]).postViews;
     cell.dateLabel.text = ((Post *)_dataSource[indexPath.row]).postDate;
+    // set single cell background
     if (indexPath.row % 2) {
         
         cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:0.2];
+    } else {
+        
+        cell.backgroundColor = [UIColor whiteColor];
     }
     return cell;
 }
 
+/**
+ *  tableview cell did selected event
+ *
+ *  @param tableView : the tableview who is trigger this event
+ *  @param indexPath : the tableview index
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    // set cell highlight disappear
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSLog(@"%d", indexPath.row);
 }
 
 @end
