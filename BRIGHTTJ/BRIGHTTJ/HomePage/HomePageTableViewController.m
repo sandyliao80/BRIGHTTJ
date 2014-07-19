@@ -17,6 +17,7 @@
 #import "NetworkConnectionDelegate.h"
 #import "CustomTableViewCell.h"
 #import "Post.h"
+#import "PostDetailViewController.h"
 
 #define CELL_IDENTIFIER @"Custom"
 #define POST_ID(index) [[data allKeys] objectAtIndex:index]
@@ -30,6 +31,8 @@
 - (void)initializeUserInterface;
 
 - (void)barButtonItemPressed:(UIBarButtonItem *)sender;
+
+- (void)updateUserInterfaceWithData:(NSDictionary *)data;
 
 @end
 
@@ -76,20 +79,27 @@
     
     // initialize network connection
     NetworkConnection *connection = [[NetworkConnection alloc] init];
+    
     // set request url
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
+    
     // set connection data
-    connection.postData = nil;
+    connection.postData = @{@"type": @"posts"};
+    
     // send request with post method
     [connection asynchronousPOSTRequert];
+    
     // set NetworkConnectionDelegate delegate
     connection.delegate = self;
+    [connection release];
 }
 
 /**
  *  initialize user interface
  */
 - (void)initializeUserInterface {
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     
     // register custom cell with cell identifier
     [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:CELL_IDENTIFIER];
@@ -105,12 +115,12 @@
     [categoryListButton release];
     
     // initialize category list bar button with image "more.png"
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"]
+    UIBarButtonItem *earthButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"earth"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(barButtonItemPressed:)];
-    self.navigationItem.rightBarButtonItem = shareButton;
-    [shareButton release];
+    self.navigationItem.rightBarButtonItem = earthButton;
+    [earthButton release];
 }
 
 /**
@@ -126,11 +136,11 @@
 #pragma mark - NetworkConnectionDelegate methods
 
 /**
- *  update user interface untill connection has response
+ *  recevie network connection response data
  *
  *  @param data : response data
  */
-- (void)updateUserInterfaceWithData:(NSDictionary *)data {
+- (void)recevieResponseData:(NSDictionary *)data {
     
     // package data in post object
     for (int i = 0; i < [data allKeys].count; i ++) {
@@ -145,8 +155,19 @@
         [_dataSource addObject:post];
         [post release];
     }
+    
+    // to ask update user interface with data
+    [self updateUserInterfaceWithData:data];
+}
+
+/**
+ *  update user interface
+ *
+ *  @param data : update data
+ */
+- (void)updateUserInterfaceWithData:(NSDictionary *)data {
+    
     [self.tableView reloadData];
-    NSLog(@"%@", data);
 }
 
 #pragma mark - Table view data source
@@ -219,7 +240,11 @@
     
     // set cell highlight disappear
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSLog(@"%d", indexPath.row);
+    
+    Post *selectedPost = (Post *)_dataSource[indexPath.row];
+    PostDetailViewController *postDetailVC = [[PostDetailViewController alloc] initWithPostID:selectedPost.postID];
+    [self.navigationController pushViewController:postDetailVC animated:YES];
+    [postDetailVC release];
 }
 
 @end

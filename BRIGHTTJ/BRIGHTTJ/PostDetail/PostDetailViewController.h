@@ -10,4 +10,6 @@
 
 @interface PostDetailViewController : UIViewController
 
+- (id)initWithPostID:(NSString *)postID;
+
 @end

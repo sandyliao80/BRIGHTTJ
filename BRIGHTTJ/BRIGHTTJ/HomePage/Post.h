@@ -15,5 +15,6 @@
 @property (nonatomic, retain) NSString *postDate; // post date
 @property (nonatomic, retain) NSString *postViews; // post views
 @property (nonatomic, retain) NSString *postAuthor; // post author
+@property (nonatomic, retain) NSString *postContent; // post content
 
 @end
