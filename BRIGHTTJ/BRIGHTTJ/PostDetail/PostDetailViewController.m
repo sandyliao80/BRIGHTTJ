@@ -6,6 +6,12 @@
 //  Copyright (c) 2014年 brighttj. All rights reserved.
 //
 
+/*
+ 
+ post detail user interface and logical code.
+ 
+ */
+
 #import "PostDetailViewController.h"
 #import "NetworkConnection.h"
 #import "NetworkConnectionDelegate.h"
@@ -72,20 +78,32 @@
     [self initializeUserInterface];
 }
 
+/**
+ *  initialize data source
+ */
 - (void)initializeDataSource {
     
+    // initialize network connection
     NetworkConnection *connection = [[NetworkConnection alloc] init];
+    // set request url
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
+    // set connection data
     connection.postData = @{@"type": @"post", @"id": _post.postID};
+    // send request with post method
     [connection asynchronousPOSTRequert];
+    // set NetworkConnectionDelegate delegate
     connection.delegate = self;
     [connection release];
 }
 
+/**
+ *  initialize user interface
+ */
 - (void)initializeUserInterface {
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    // set right bar button
     UIImage *moreImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForAuxiliaryExecutable:@"more.png"]];
     UIBarButtonItem *moreBarButton = [[UIBarButtonItem alloc] initWithImage:moreImage
                                                                       style:UIBarButtonItemStylePlain
@@ -97,13 +115,17 @@
     _textView = [[UITextView alloc] init];
     _textView.bounds = CGRectMake(0, 0, self.view.bounds.size.width - 10, self.view.bounds.size.height);
     _textView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
-    _textView.font = [UIFont fontWithName:@"Arial" size:20.0];//设置字体名字和字体大小
-    _textView.editable = NO;
-    _textView.scrollEnabled = YES;//是否可以拖动
-    _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适应高度
-    [self.view addSubview: _textView];//加入到整个页面中
+    _textView.editable = NO; // don't allow editing
+    _textView.scrollEnabled = YES; // allow scroll
+    _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight; // auto resize
+    [self.view addSubview: _textView];
 }
 
+/**
+ *  bar button trigger event
+ *
+ *  @param sender : the bar button who is trigger this event
+ */
 - (void)barButtonPressed:(UIBarButtonItem *)sender {
     
     
@@ -118,11 +140,13 @@
  */
 - (void)recevieResponseData:(NSDictionary *)data {
     
+    // package data in post object
     _post.postTitle = [[data objectForKey:POST_ID(0)] objectForKey:@"post_title"];
     _post.postDate = [[data objectForKey:POST_ID(0)] objectForKey:@"post_date"];
     _post.postAuthor = [[data objectForKey:POST_ID(0)] objectForKey:@"post_author"];
     _post.postContent = [[data objectForKey:POST_ID(0)] objectForKey:@"post_content"];
     
+    // update user interface with data
     [self updateUserInterfaceWithData:data];
 }
 
@@ -133,6 +157,7 @@
  */
 - (void)updateUserInterfaceWithData:(NSDictionary *)data {
     
+    // set text type is html text document type
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithData:[_post.postContent dataUsingEncoding:NSUnicodeStringEncoding]
                                                                                           options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
                                                                                documentAttributes:nil

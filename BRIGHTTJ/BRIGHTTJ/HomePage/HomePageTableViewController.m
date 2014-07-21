@@ -79,16 +79,12 @@
     
     // initialize network connection
     NetworkConnection *connection = [[NetworkConnection alloc] init];
-    
     // set request url
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    
     // set connection data
     connection.postData = @{@"type": @"posts"};
-    
     // send request with post method
     [connection asynchronousPOSTRequert];
-    
     // set NetworkConnectionDelegate delegate
     connection.delegate = self;
     [connection release];
