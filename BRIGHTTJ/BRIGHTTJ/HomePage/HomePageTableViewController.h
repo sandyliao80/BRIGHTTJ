@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HomePageTableViewController : UITableViewController
+@interface HomePageTableViewController : UITableViewController {
+    
+    BOOL _footerRefreshEnable;
+}
+
+@property (nonatomic, assign) BOOL footerRefreshEnable;
+
+- (void)initializeDataSource;
+- (void)requestPostCategoryByPostCategoryId:(NSString *)postCategoryId;
 
 @end

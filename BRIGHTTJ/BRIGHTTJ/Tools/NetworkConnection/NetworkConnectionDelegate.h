@@ -14,4 +14,6 @@
 // to notify requester connection did finish loading and send response data
 - (void)recevieResponseData:(NSDictionary *)data;
 
+- (void)networkConnectionError:(NSError *)error;
+
 @end

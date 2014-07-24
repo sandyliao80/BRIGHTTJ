@@ -13,7 +13,6 @@
 
 @property (nonatomic, retain) UILabel *titleLabel; //to show post title text
 @property (nonatomic, retain) UILabel *authorLabel; //to show post author text
-@property (nonatomic, retain) UILabel *viewsLabel; //to show post views text
 @property (nonatomic, retain) UILabel *dateLabel; //to show post date text
 
 @end

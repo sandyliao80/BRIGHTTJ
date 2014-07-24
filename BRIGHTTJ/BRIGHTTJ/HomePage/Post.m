@@ -15,15 +15,18 @@
 #import "Post.h"
 #import "GTMBase64.h"
 #import "RegexKitLite.h"
+#import "PostAuthor.h"
 
 @implementation Post
 
 - (void)dealloc {
     
+    NSLog(@"%@被销毁了", [self class]);
+    
+    [_postAuthor release];
     [_postContent release];
     [_postTitle release];
     [_postID release];
-    [_postViews release];
     [_postDate release];
     [super dealloc];
 }
@@ -55,13 +58,7 @@
         [_postAuthor release];
         
         // replace post author id with post author name
-        if ([postAuthor intValue] == 2) {
-            
-            _postAuthor = [[NSString stringWithFormat:@"敬洁"] retain];
-        } else {
-            
-            _postAuthor = [[NSString stringWithFormat:@"唐嘉蓉"] retain];
-        }
+        _postAuthor = [[[PostAuthor standardPostAnthorWithAuthorId:postAuthor] authorName] retain];
     }
 }
 
@@ -79,15 +76,11 @@
         // decode string with base64
         NSData *data = [GTMBase64 decodeString:postContent];
         
-        // set post title text and style using html code
-        self.postTitle = [[NSString stringWithFormat:@"%@%@%@", @"<body style=\"line-height: 18px;\"><br/><h3 style=\"text-align:center;\">", _postTitle, @"</h3>"] retain];
-        
         // set post date text and style using html code
-        self.postDate = [[NSString stringWithFormat:@"%@%@%@%@%@", @"<p style=\"font-size:12;color:#807f7e;text-align:center\">", _postAuthor, @"&nbsp;&nbsp;&nbsp;&nbsp;", _postDate, @"</p>"] retain];
+        NSString *postDate = [NSString stringWithFormat:@"</h3><p style=\"font-size:12;color:#807f7e;text-align:center\">%@%@%@%@", _postAuthor, @"&nbsp;&nbsp;&nbsp;&nbsp;", _postDate, @"</p>"];
         
         // initialize post content
-        NSString *postContentString = [NSString stringWithFormat:@"%@%@%@%@", _postTitle, _postDate,
-                                              [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease], @"</body>"];
+        NSString *postContentString = [NSString stringWithFormat:@"%@%@%@%@%@", @"<body style=\"line-height: 18px;\"><br/><h3 style=\"text-align:center;\">", _postTitle, postDate, [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease], @"</body>"];
         
         // block or replace special char in post content
         postContentString = [self addBlockquoteStyleInString:postContentString];
@@ -97,7 +90,7 @@
         // set post content
         _postContent = [[NSString stringWithFormat:@"%@", postContentString] retain];
         
-        NSLog(@"%@", postContentString);
+        NSLog(@"%@", _postContent);
     }
 }
 
@@ -126,7 +119,7 @@
 - (NSString *)deleteCaptionMetaInString:(NSString *)string {
     
     // set regex
-    NSString *regexString = [NSString stringWithFormat:@"%@", @"\\[caption id=\"\" align=\"alignnone\" width=\"...\"\\]"];
+    NSString *regexString = [NSString stringWithFormat:@"%@", @"\\[caption id=\"\" align=\".*\" width=\"...\"\\]"];
     // replace string by regex
     string = [string stringByReplacingOccurrencesOfRegex:regexString withString:@""];
     string = [string stringByReplacingOccurrencesOfString:@"[/caption]" withString:@"<br/>"];
@@ -148,9 +141,47 @@
     // replace string by regex
     string = [string stringByReplacingOccurrencesOfRegex:regexString withString:@"width=\"320\""];
     
-    NSLog(@"%@", regexString);
-    
     return string;
+}
+
+- (NSComparisonResult)postIdCompare:(Post *)post {
+    
+    return [_postID compare:post.postID] * -1;
+}
+
+#pragma mark - NSCoding methods
+
+/**
+ *  对象编码为NSData
+ *
+ *  @param aCoder 编码器
+ */
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    
+    [aCoder encodeObject:_postID forKey:@"postID"];
+    [aCoder encodeObject:_postDate forKey:@"postData"];
+    [aCoder encodeObject:_postTitle forKey:@"postTitle"];
+    [aCoder encodeObject:_postAuthor forKey:@"postAuthor"];
+}
+
+/**
+ *  NSData解码为对象
+ *
+ *  @param aDecoder 解码器
+ *
+ *  @return 已经解码的对象
+ */
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    
+    self = [super init];
+    if (self) {
+        
+        self.postID = [aDecoder decodeObjectForKey:@"postID"];
+        self.postDate = [aDecoder decodeObjectForKey:@"postData"];
+        self.postTitle = [aDecoder decodeObjectForKey:@"postTitle"];
+        self.postAuthor = [aDecoder decodeObjectForKey:@"postAuthor"];
+    }
+    return self;
 }
 
 @end

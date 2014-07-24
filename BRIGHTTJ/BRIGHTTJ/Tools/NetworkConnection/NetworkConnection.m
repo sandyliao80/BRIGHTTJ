@@ -123,10 +123,9 @@
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    NSLog(@"1");
-    NSLog(@"%@",error);
-}
 
+    [self.delegate networkConnectionError:error];
+}
 
 /**
  *  trigger this event when connection did finish loading
@@ -134,9 +133,6 @@
  *  @param connection : network connection
  */
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
-    NSString * respStr = [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",respStr);
     
     // serilaize data to json
     id object = [self JSONObjectWithData:_responseData];

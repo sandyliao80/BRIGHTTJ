@@ -18,21 +18,34 @@
 #import "CustomTableViewCell.h"
 #import "Post.h"
 #import "PostDetailViewController.h"
+#import "LeftView.h"
+#import "PostCategory.h"
+#import "MJRefresh.h"
+#import "CSNotificationView.h"
+#import "DataPersistence.h"
 
 #define CELL_IDENTIFIER @"Custom"
-#define POST_ID(index) [[data allKeys] objectAtIndex:index]
+#define GET_ID_IN_DICTIONARY(index) [[data allKeys] objectAtIndex:index]
 
 @interface HomePageTableViewController () <NetworkConnectionDelegate> {
     
+    NSMutableArray *_tempDataSource;
     NSMutableArray *_dataSource;
+    BOOL _isCategoryList;
+    BOOL _isFooterRefreshing;
+    BOOL _isHeaderRefreshing;
+    NSInteger _page;
 }
 
-- (void)initializeDataSource;
+@property (nonatomic, retain) NSMutableArray *dataSource;
+
 - (void)initializeUserInterface;
 
-- (void)barButtonItemPressed:(UIBarButtonItem *)sender;
-
 - (void)updateUserInterfaceWithData:(NSDictionary *)data;
+- (void)footerRefreshing;
+- (void)headerRefreshing;
+
+- (void)readPostsListFromLocalData;
 
 @end
 
@@ -51,6 +64,12 @@
         
         self.title = @"BRIGHTTJ";
         _dataSource = [[NSMutableArray alloc] init];
+        _tempDataSource = [[NSMutableArray alloc] init];
+        _isCategoryList = NO;
+        _isFooterRefreshing = NO;
+        _isHeaderRefreshing = YES;
+        _page = 0;
+        _footerRefreshEnable = YES;
     }
     
     return self;
@@ -58,6 +77,9 @@
 
 - (void)dealloc {
     
+    NSLog(@"%@被销毁了", [self class]);
+    
+    [_tempDataSource release];
     [_dataSource release];
     [super dealloc];
 }
@@ -82,7 +104,7 @@
     // set request url
     connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
     // set connection data
-    connection.postData = @{@"type": @"posts"};
+    connection.postData = @{@"type": @"posts", @"page": [NSString stringWithFormat:@"%d", _page]};
     // send request with post method
     [connection asynchronousPOSTRequert];
     // set NetworkConnectionDelegate delegate
@@ -96,37 +118,33 @@
 - (void)initializeUserInterface {
     
     self.view.backgroundColor = [UIColor whiteColor];
+    [self.tableView addFooterWithTarget:self action:@selector(footerRefreshing)];
+    [self.tableView addHeaderWithTarget:self action:@selector(headerRefreshing)];
     
     // register custom cell with cell identifier
     [self.tableView registerClass:[CustomTableViewCell class] forCellReuseIdentifier:CELL_IDENTIFIER];
     // set table row height
     self.tableView.rowHeight = 80;
     
-    // initialize category list bar button with image "menu.png"
-    UIBarButtonItem *categoryListButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu"]
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self
-                                                                          action:@selector(barButtonItemPressed:)];
-    self.navigationItem.leftBarButtonItem = categoryListButton;
-    [categoryListButton release];
-    
-    // initialize category list bar button with image "more.png"
-    UIBarButtonItem *earthButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"earth"]
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self
-                                                                          action:@selector(barButtonItemPressed:)];
-    self.navigationItem.rightBarButtonItem = earthButton;
-    [earthButton release];
+    [self readPostsListFromLocalData];
 }
 
-/**
- *  bar button trigger event
- *
- *  @param sender : the bar button who is trigger this event
- */
-- (void)barButtonItemPressed:(UIBarButtonItem *)sender {
+#pragma mark - PostCategoryDelegate methods
+
+- (void)requestPostCategoryByPostCategoryId:(NSString *)postCategoryId {
     
-    
+    // initialize network connection
+    NetworkConnection *connection = [[NetworkConnection alloc] init];
+    // set request url
+    connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
+    // set connection data
+    connection.postData = @{@"type": @"category", @"id":postCategoryId};
+    // send request with post method
+    [connection asynchronousPOSTRequert];
+    // set NetworkConnectionDelegate delegate
+    connection.delegate = self;
+    [connection release];
+    _isCategoryList = YES;
 }
 
 #pragma mark - NetworkConnectionDelegate methods
@@ -138,35 +156,103 @@
  */
 - (void)recevieResponseData:(NSDictionary *)data {
     
+    NSLog(@"我是到网络上请求的列表");
+    
+    if (_isCategoryList || !_isFooterRefreshing || _isHeaderRefreshing) {
+        
+        [_dataSource removeAllObjects];
+    }
+    if (_isHeaderRefreshing) {
+        
+        [DataPersistence deleteAllPostsList];
+    }
+    
     // package data in post object
     for (int i = 0; i < [data allKeys].count; i ++) {
         
         Post *post = [[Post alloc] init];
-        post.postID = POST_ID(i);
-        post.postTitle = [[data objectForKey:POST_ID(i)] objectForKey:@"post_title"];
-        post.postAuthor = [[data objectForKey:POST_ID(i)] objectForKey:@"post_author"];
-        post.postDate = [[data objectForKey:POST_ID(i)] objectForKey:@"post_date"];
-        post.postViews = [[data objectForKey:POST_ID(i)] objectForKey:@"post_views"];
+        post.postID = GET_ID_IN_DICTIONARY(i);
+        post.postTitle = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_title"];
+        post.postAuthor = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_author"];
+        post.postDate = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_date"];
         // add post into _dataSource
-        [_dataSource addObject:post];
+        [_tempDataSource addObject:post];
         [post release];
+        NSLog(@"post count 1 : %d", [post retainCount]);
     }
+    
+    NSLog(@"--->category---->%d, ", _isCategoryList);
+    
+    [_tempDataSource sortUsingSelector:@selector(postIdCompare:)];
+    [_dataSource addObjectsFromArray:_tempDataSource];
+    
+    if (!_isCategoryList) {
+        
+        [DataPersistence savePostsList:_tempDataSource];
+        NSLog(@"enable-->%d", _footerRefreshEnable);
+    }
+    [_tempDataSource removeAllObjects];
     
     // to ask update user interface with data
     [self updateUserInterfaceWithData:data];
+    
+    _isCategoryList = NO;
+    _isFooterRefreshing = NO;
+    _isHeaderRefreshing = NO;
+    [self.tableView footerEndRefreshing];
+    [self.tableView headerEndRefreshing];
 }
+
+- (void)networkConnectionError:(NSError *)error {
+    
+    NSLog(@"我是到缓存里面读的列表");
+    
+    NSLog(@"%@", error);
+    
+    _isFooterRefreshing = NO;
+    _isHeaderRefreshing = NO;
+    [self.tableView footerEndRefreshing];
+    [self.tableView headerEndRefreshing];
+    
+    [CSNotificationView showInViewController:self style:CSNotificationViewStyleError message:@"网络连接失败，无法更新文章列表"];
+    
+    [self readPostsListFromLocalData];
+}
+
+#pragma mark - UpdateUserInterface methods
 
 /**
  *  update user interface
  *
  *  @param data : update data
  */
-- (void)updateUserInterfaceWithData:(NSDictionary *)data {
+- (void)updateUserInterfaceWithData:(NSMutableDictionary *)data {
     
     [self.tableView reloadData];
 }
 
-#pragma mark - Table view data source
+- (void)footerRefreshing {
+    
+    if (_footerRefreshEnable) {
+        
+        _isFooterRefreshing = YES;
+        _page ++;
+        [self initializeDataSource];
+    } else {
+        
+        [self.tableView footerEndRefreshing];
+    }
+}
+
+- (void)headerRefreshing {
+    
+    _page = 0;
+    _isHeaderRefreshing = YES;
+    _footerRefreshEnable = YES;
+    [self initializeDataSource];
+}
+
+#pragma mark - UITableViewDataSource methods
 
 /**
  *  set the number of sections
@@ -213,7 +299,6 @@
     // set cell text
     cell.titleLabel.text = ((Post *)_dataSource[indexPath.row]).postTitle;
     cell.authorLabel.text = ((Post *)_dataSource[indexPath.row]).postAuthor;
-    cell.viewsLabel.text = ((Post *)_dataSource[indexPath.row]).postViews;
     cell.dateLabel.text = ((Post *)_dataSource[indexPath.row]).postDate;
     // set single cell background
     if (indexPath.row % 2) {
@@ -236,11 +321,17 @@
     
     // set cell highlight disappear
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     Post *selectedPost = (Post *)_dataSource[indexPath.row];
     PostDetailViewController *postDetailVC = [[PostDetailViewController alloc] initWithPostID:selectedPost.postID];
     [self.navigationController pushViewController:postDetailVC animated:YES];
     [postDetailVC release];
+}
+
+- (void)readPostsListFromLocalData {
+    
+    self.dataSource = [DataPersistence readPostsList];
+    [self.tableView reloadData];
 }
 
 @end

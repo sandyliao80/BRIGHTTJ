@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LeftView : UIView
+@interface LeftView : UIView {
+    
+    UITableView *_tableView;
+}
+
+@property (nonatomic, retain) UITableView *tableView;
 
 @end

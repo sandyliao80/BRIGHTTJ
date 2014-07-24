@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "HomePageTableViewController.h"
+#import "RootViewController.h"
+#import "DataPersistence.h"
 
 @implementation AppDelegate
 
@@ -18,15 +19,13 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    HomePageTableViewController *homePageTVC = [[HomePageTableViewController alloc] init];
-    UINavigationController *navControlelr = [[UINavigationController alloc] initWithRootViewController:homePageTVC];
-    [navControlelr.navigationBar setBackgroundImage:[UIImage imageNamed:@"background_title,jpg"] forBarMetrics:UIBarMetricsDefault];
-    navControlelr.navigationBar.translucent = YES;
-    navControlelr.navigationBar.tintColor = [UIColor colorWithRed:(226/255.0) green:(101/255.0) blue:(64/255.0) alpha:1];
-    [homePageTVC release];
+    [DataPersistence deleteAllPosts];
     
-    self.window.rootViewController = navControlelr;
-    [navControlelr release];
+    RootViewController *rootVC = [[RootViewController alloc] init];
+    self.window.rootViewController = rootVC;
+    [rootVC release];
+    
+    [self.window release];
     
     return YES;
 }
@@ -56,6 +55,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [DataPersistence deleteAllPosts];
 }
 
 @end

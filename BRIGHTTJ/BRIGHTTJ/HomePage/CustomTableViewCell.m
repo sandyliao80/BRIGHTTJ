@@ -24,7 +24,8 @@
 
 - (void)dealloc {
     
-    [_viewsLabel release];
+    NSLog(@"%@被销毁了", [self class]);
+    
     [_titleLabel release];
     [_authorLabel release];
     [_dateLabel release];
@@ -67,19 +68,6 @@
     _authorLabel.font = [UIFont systemFontOfSize:12];
     _authorLabel.textColor = [UIColor lightGrayColor];
     [self.contentView addSubview:_authorLabel];
-    
-    // config post views image
-    UIImage *postViewsImage = [UIImage imageNamed:@"post_views"];
-    UIImageView *postViewsImageView = [[UIImageView alloc] initWithImage:postViewsImage];
-    postViewsImageView.frame = CGRectMake(113, 60, 12, 12);
-    [self.contentView addSubview:postViewsImageView];
-    [postViewsImageView release];
-    
-    // config _viewsLabel
-    _viewsLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 60, 100, 10)];
-    _viewsLabel.font = [UIFont systemFontOfSize:12];
-    _viewsLabel.textColor = [UIColor lightGrayColor];
-    [self.contentView addSubview:_viewsLabel];
     
     // config post date image
     UIImage *postDateImage = [UIImage imageNamed:@"post_date"];
