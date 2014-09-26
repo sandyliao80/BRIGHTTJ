@@ -14,8 +14,6 @@
  */
 
 #import "PostDetailViewController.h"
-#import "NetworkConnection.h"
-#import "NetworkConnectionDelegate.h"
 #import "GTMBase64.h"
 #import "Post.h"
 #import <ShareSDK/ShareSDK.h>
@@ -24,10 +22,11 @@
 #import "PostAuthor.h"
 #import "DataPersistence.h"
 #import "SvGifView.h"
+#import "RequestBase+PostDetailRequest.h"
 
-#define POST_ID(index) [[data allKeys] objectAtIndex:index]
+#define POST_ID(index) [[result allKeys] objectAtIndex:index]
 
-@interface PostDetailViewController () <NetworkConnectionDelegate, UIActionSheetDelegate> {
+@interface PostDetailViewController () <UIActionSheetDelegate> {
     
     Post *_post;
     NSString *_postContent;
@@ -106,19 +105,27 @@
  */
 - (void)initializeDataSource {
     
-    // initialize network connection
-    NetworkConnection *connection = [[NetworkConnection alloc] init];
-    // set request url
-    connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    // set connection data
-    connection.postData = @{@"type": @"post", @"id": _post.postID};
-    // send request with post method
-    [connection asynchronousPOSTRequert];
-    // set NetworkConnectionDelegate delegate
-    connection.delegate = self;
-    [connection release];
-    
     [_gifView startGif];
+    
+    [RequestBase requestPostDetailWithPostId:_post.postID callback:^(NSError *error, NSMutableDictionary *result) {
+        
+        if (!error) {
+            
+            // package data in post object
+            _post.postTitle = [[result objectForKey:POST_ID(0)] objectForKey:@"post_title"];
+            _post.postDate = [[result objectForKey:POST_ID(0)] objectForKey:@"post_date"];
+            _post.postAuthor = [[result objectForKey:POST_ID(0)] objectForKey:@"post_author"];
+            _post.postContent = [[result objectForKey:POST_ID(0)] objectForKey:@"post_content"];
+            
+            [DataPersistence savePostContent:_post];
+            
+            // update user interface with data
+            [self updateUserInterfaceWithPostContent:_post.postContent];
+        } else {
+            
+            [_gifView stopGif];
+        }
+    }];
 }
 
 /**
@@ -220,33 +227,6 @@
                                     NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
                                 }
                             }];
-}
-
-#pragma mark - NetworkConnectionDelegate methods
-
-/**
- *  recevie network connection response data
- *
- *  @param data : response data
- */
-- (void)recevieResponseData:(NSMutableDictionary *)data {
-    
-    // package data in post object
-    _post.postTitle = [[data objectForKey:POST_ID(0)] objectForKey:@"post_title"];
-    _post.postDate = [[data objectForKey:POST_ID(0)] objectForKey:@"post_date"];
-    _post.postAuthor = [[data objectForKey:POST_ID(0)] objectForKey:@"post_author"];
-    _post.postContent = [[data objectForKey:POST_ID(0)] objectForKey:@"post_content"];
-    
-    [DataPersistence savePostContent:_post];
-    
-    // update user interface with data
-    [self updateUserInterfaceWithPostContent:_post.postContent];
-}
-
-- (void)networkConnectionError:(NSError *)error {
-    
-    [_gifView stopGif];
-    NSLog(@"%@", error);
 }
 
 /**

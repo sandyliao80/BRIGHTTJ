@@ -13,8 +13,7 @@
  */
 
 #import "HomePageTableViewController.h"
-#import "NetworkConnection.h"
-#import "NetworkConnectionDelegate.h"
+
 #import "CustomTableViewCell.h"
 #import "Post.h"
 #import "PostDetailViewController.h"
@@ -24,11 +23,13 @@
 #import "CSNotificationView.h"
 #import "DataPersistence.h"
 #import "RootViewController.h"
+#import "RequestBase+PostsListRequest.h"
+#import "RequestBase+PostsCategoryWithPostIdRequest.h"
 
 #define CELL_IDENTIFIER @"Custom"
-#define GET_ID_IN_DICTIONARY(index) [[data allKeys] objectAtIndex:index]
+#define GET_ID_IN_DICTIONARY(index) [[result allKeys] objectAtIndex:index]
 
-@interface HomePageTableViewController () <NetworkConnectionDelegate> {
+@interface HomePageTableViewController () {
     
     NSMutableArray *_tempDataSource;
     NSMutableArray *_dataSource;
@@ -100,17 +101,67 @@
  */
 - (void)initializeDataSource {
     
-    // initialize network connection
-    NetworkConnection *connection = [[NetworkConnection alloc] init];
-    // set request url
-    connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    // set connection data
-    connection.postData = @{@"type": @"posts", @"page": [NSString stringWithFormat:@"%d", _page]};
-    // send request with post method
-    [connection asynchronousPOSTRequert];
-    // set NetworkConnectionDelegate delegate
-    connection.delegate = self;
-    [connection release];
+    [RequestBase requestPostsListWithPage:@"1" callback:^(NSError *error, NSMutableDictionary *result) {
+        
+        if (!error && [result allKeys].count) {
+            
+            NSLog(@"我是到网络上请求的列表");
+            
+            if (_isCategoryList || !_isFooterRefreshing || _isHeaderRefreshing) {
+                
+                [_dataSource removeAllObjects];
+            }
+            if (_isHeaderRefreshing) {
+                
+                [DataPersistence deleteAllPostsList];
+            }
+            
+            // package data in post object
+            for (int i = 0; i < [result allKeys].count; i ++) {
+                
+                Post *post = [[Post alloc] init];
+                post.postID = GET_ID_IN_DICTIONARY(i);
+                post.postTitle = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_title"];
+                post.postAuthor = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_author"];
+                post.postDate = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_date"];
+                // add post into _dataSource
+                [_tempDataSource addObject:post];
+                [post release];
+                NSLog(@"post count 1 : %d", [post retainCount]);
+            }
+            
+            NSLog(@"--->category---->%d, ", _isCategoryList);
+            
+            [_tempDataSource sortUsingSelector:@selector(postIdCompare:)];
+            [_dataSource addObjectsFromArray:_tempDataSource];
+            
+            if (!_isCategoryList) {
+                
+                [DataPersistence savePostsList:_tempDataSource];
+                NSLog(@"enable-->%d", _footerRefreshEnable);
+            }
+            [_tempDataSource removeAllObjects];
+            
+            // to ask update user interface with data
+            [self updateUserInterfaceWithData:result];
+            
+            _isCategoryList = NO;
+            _isFooterRefreshing = NO;
+            _isHeaderRefreshing = NO;
+            [self.tableView footerEndRefreshing];
+            [self.tableView headerEndRefreshing];
+        } else {
+            
+            _isFooterRefreshing = NO;
+            _isHeaderRefreshing = NO;
+            [self.tableView footerEndRefreshing];
+            [self.tableView headerEndRefreshing];
+            
+            [CSNotificationView showInViewController:self style:CSNotificationViewStyleError message:@"网络连接失败，无法更新文章列表"];
+            
+            [self readPostsListFromLocalData];
+        }
+    }];
 }
 
 /**
@@ -134,90 +185,12 @@
 
 - (void)requestPostCategoryByPostCategoryId:(NSString *)postCategoryId {
     
-    // initialize network connection
-    NetworkConnection *connection = [[NetworkConnection alloc] init];
-    // set request url
-    connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    // set connection data
-    connection.postData = @{@"type": @"category", @"id":postCategoryId};
-    // send request with post method
-    [connection asynchronousPOSTRequert];
-    // set NetworkConnectionDelegate delegate
-    connection.delegate = self;
-    [connection release];
     _isCategoryList = YES;
-}
-
-#pragma mark - NetworkConnectionDelegate methods
-
-/**
- *  recevie network connection response data
- *
- *  @param data : response data
- */
-- (void)recevieResponseData:(NSDictionary *)data {
     
-    NSLog(@"我是到网络上请求的列表");
-    
-    if (_isCategoryList || !_isFooterRefreshing || _isHeaderRefreshing) {
+    [RequestBase requestPostsListWithPostId:postCategoryId callback:^(NSError *error, NSMutableDictionary *result) {
         
-        [_dataSource removeAllObjects];
-    }
-    if (_isHeaderRefreshing) {
-        
-        [DataPersistence deleteAllPostsList];
-    }
-    
-    // package data in post object
-    for (int i = 0; i < [data allKeys].count; i ++) {
-        
-        Post *post = [[Post alloc] init];
-        post.postID = GET_ID_IN_DICTIONARY(i);
-        post.postTitle = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_title"];
-        post.postAuthor = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_author"];
-        post.postDate = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_date"];
-        // add post into _dataSource
-        [_tempDataSource addObject:post];
-        [post release];
-        NSLog(@"post count 1 : %d", [post retainCount]);
-    }
-    
-    NSLog(@"--->category---->%d, ", _isCategoryList);
-    
-    [_tempDataSource sortUsingSelector:@selector(postIdCompare:)];
-    [_dataSource addObjectsFromArray:_tempDataSource];
-    
-    if (!_isCategoryList) {
-        
-        [DataPersistence savePostsList:_tempDataSource];
-        NSLog(@"enable-->%d", _footerRefreshEnable);
-    }
-    [_tempDataSource removeAllObjects];
-    
-    // to ask update user interface with data
-    [self updateUserInterfaceWithData:data];
-    
-    _isCategoryList = NO;
-    _isFooterRefreshing = NO;
-    _isHeaderRefreshing = NO;
-    [self.tableView footerEndRefreshing];
-    [self.tableView headerEndRefreshing];
-}
-
-- (void)networkConnectionError:(NSError *)error {
-    
-    NSLog(@"我是到缓存里面读的列表");
-    
-    NSLog(@"%@", error);
-    
-    _isFooterRefreshing = NO;
-    _isHeaderRefreshing = NO;
-    [self.tableView footerEndRefreshing];
-    [self.tableView headerEndRefreshing];
-    
-    [CSNotificationView showInViewController:self style:CSNotificationViewStyleError message:@"网络连接失败，无法更新文章列表"];
-    
-    [self readPostsListFromLocalData];
+        // TODO:分类请求回调处理
+    }];
 }
 
 #pragma mark - UpdateUserInterface methods

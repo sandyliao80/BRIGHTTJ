@@ -91,12 +91,17 @@
 		246C5F9B197E7E7A001B73BF /* ShareSDKiPhoneSimpleShareViewUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246C5F6A197E7E7A001B73BF /* ShareSDKiPhoneSimpleShareViewUI.framework */; };
 		246C5F9C197E7E7A001B73BF /* ShareSDKShareActionSheet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246C5F6B197E7E7A001B73BF /* ShareSDKShareActionSheet.framework */; };
 		246C5F9F197E80DD001B73BF /* PostAuthor.m in Sources */ = {isa = PBXBuildFile; fileRef = 246C5F9E197E80DD001B73BF /* PostAuthor.m */; };
+		246FE77019D4EE4400C6AC85 /* TJRNetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE76F19D4EE4400C6AC85 /* TJRNetworkConnection.m */; };
+		246FE78019D4EE5200C6AC85 /* RequestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE77B19D4EE5200C6AC85 /* RequestBase.m */; };
+		246FE78319D4EEA500C6AC85 /* RequestBase+PostsListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE78219D4EEA500C6AC85 /* RequestBase+PostsListRequest.m */; };
+		246FE78619D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE78519D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.m */; };
+		246FE78919D4F54400C6AC85 /* RequestBase+PostDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE78819D4F54400C6AC85 /* RequestBase+PostDetailRequest.m */; };
+		246FE78C19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.m in Sources */ = {isa = PBXBuildFile; fileRef = 246FE78B19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.m */; };
 		247C0744197F780E005905AE /* CSNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 247C0742197F780E005905AE /* CSNotificationView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		247C0745197F780E005905AE /* CSNotificationView.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 247C0743197F780E005905AE /* CSNotificationView.xcassets */; };
 		247C074C197FB5D2005905AE /* DataPersistence.m in Sources */ = {isa = PBXBuildFile; fileRef = 247C074B197FB5D2005905AE /* DataPersistence.m */; };
 		248553831978A8A600FB788E /* LeftView.m in Sources */ = {isa = PBXBuildFile; fileRef = 248553821978A8A600FB788E /* LeftView.m */; };
 		248554E81979269400FB788E /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 248554E71979269400FB788E /* GTMBase64.m */; };
-		248554ED1979346400FB788E /* NetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 248554EB1979346400FB788E /* NetworkConnection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -237,6 +242,18 @@
 		246C5F6B197E7E7A001B73BF /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
 		246C5F9D197E80DD001B73BF /* PostAuthor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostAuthor.h; sourceTree = "<group>"; };
 		246C5F9E197E80DD001B73BF /* PostAuthor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostAuthor.m; sourceTree = "<group>"; };
+		246FE76E19D4EE4400C6AC85 /* TJRNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TJRNetworkConnection.h; sourceTree = "<group>"; };
+		246FE76F19D4EE4400C6AC85 /* TJRNetworkConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TJRNetworkConnection.m; sourceTree = "<group>"; };
+		246FE77A19D4EE5200C6AC85 /* RequestBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestBase.h; sourceTree = "<group>"; };
+		246FE77B19D4EE5200C6AC85 /* RequestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestBase.m; sourceTree = "<group>"; };
+		246FE78119D4EEA500C6AC85 /* RequestBase+PostsListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RequestBase+PostsListRequest.h"; sourceTree = "<group>"; };
+		246FE78219D4EEA500C6AC85 /* RequestBase+PostsListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RequestBase+PostsListRequest.m"; sourceTree = "<group>"; };
+		246FE78419D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RequestBase+PostsCategoryWithPostIdRequest.h"; sourceTree = "<group>"; };
+		246FE78519D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RequestBase+PostsCategoryWithPostIdRequest.m"; sourceTree = "<group>"; };
+		246FE78719D4F54400C6AC85 /* RequestBase+PostDetailRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RequestBase+PostDetailRequest.h"; sourceTree = "<group>"; };
+		246FE78819D4F54400C6AC85 /* RequestBase+PostDetailRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RequestBase+PostDetailRequest.m"; sourceTree = "<group>"; };
+		246FE78A19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RequestBase+PostsCategoryReuqest.h"; sourceTree = "<group>"; };
+		246FE78B19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RequestBase+PostsCategoryReuqest.m"; sourceTree = "<group>"; };
 		247C0741197F780E005905AE /* CSNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSNotificationView.h; sourceTree = "<group>"; };
 		247C0742197F780E005905AE /* CSNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSNotificationView.m; sourceTree = "<group>"; };
 		247C0743197F780E005905AE /* CSNotificationView.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = CSNotificationView.xcassets; sourceTree = "<group>"; };
@@ -246,9 +263,6 @@
 		248553821978A8A600FB788E /* LeftView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftView.m; sourceTree = "<group>"; };
 		248554E61979269400FB788E /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		248554E71979269400FB788E /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
-		248554EA1979346400FB788E /* NetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
-		248554EB1979346400FB788E /* NetworkConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkConnection.m; sourceTree = "<group>"; };
-		248554EC1979346400FB788E /* NetworkConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkConnectionDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -366,6 +380,7 @@
 				248553801978A89500FB788E /* PostsCategory */,
 				2459A9FE1976AA7F0068F50C /* PostDetail */,
 				24694E54197D1C5300DD15E4 /* FoundationClass */,
+				246FE77119D4EE5200C6AC85 /* Request */,
 				2459A9E019764D7F0068F50C /* Tools */,
 				2459A9BD19764D480068F50C /* Images.xcassets */,
 				2459A9DD19764D7F0068F50C /* Images */,
@@ -436,13 +451,13 @@
 		2459A9E019764D7F0068F50C /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				246FE76D19D4EE4400C6AC85 /* TJRNetworkConnection */,
 				24256EAB197FDC38001128D0 /* SvGifView */,
 				247C0749197FB5D2005905AE /* DataPersistence */,
 				247C0740197F780E005905AE /* CSNotificationView */,
 				246C5F25197E7E79001B73BF /* ShareSDK */,
 				24672C89197A6F5A00256DD9 /* RegexKitLite-4.0 */,
 				246C5DDA197E282C001B73BF /* MJRefresh */,
-				248554E91979346400FB788E /* NetworkConnection */,
 				248554E51979269400FB788E /* GTMBase64 */,
 			);
 			path = Tools;
@@ -668,6 +683,32 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		246FE76D19D4EE4400C6AC85 /* TJRNetworkConnection */ = {
+			isa = PBXGroup;
+			children = (
+				246FE76E19D4EE4400C6AC85 /* TJRNetworkConnection.h */,
+				246FE76F19D4EE4400C6AC85 /* TJRNetworkConnection.m */,
+			);
+			path = TJRNetworkConnection;
+			sourceTree = "<group>";
+		};
+		246FE77119D4EE5200C6AC85 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				246FE77A19D4EE5200C6AC85 /* RequestBase.h */,
+				246FE77B19D4EE5200C6AC85 /* RequestBase.m */,
+				246FE78119D4EEA500C6AC85 /* RequestBase+PostsListRequest.h */,
+				246FE78219D4EEA500C6AC85 /* RequestBase+PostsListRequest.m */,
+				246FE78419D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.h */,
+				246FE78519D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.m */,
+				246FE78719D4F54400C6AC85 /* RequestBase+PostDetailRequest.h */,
+				246FE78819D4F54400C6AC85 /* RequestBase+PostDetailRequest.m */,
+				246FE78A19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.h */,
+				246FE78B19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.m */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		247C0740197F780E005905AE /* CSNotificationView */ = {
 			isa = PBXGroup;
 			children = (
@@ -703,16 +744,6 @@
 				248554E71979269400FB788E /* GTMBase64.m */,
 			);
 			path = GTMBase64;
-			sourceTree = "<group>";
-		};
-		248554E91979346400FB788E /* NetworkConnection */ = {
-			isa = PBXGroup;
-			children = (
-				248554EA1979346400FB788E /* NetworkConnection.h */,
-				248554EB1979346400FB788E /* NetworkConnection.m */,
-				248554EC1979346400FB788E /* NetworkConnectionDelegate.h */,
-			);
-			path = NetworkConnection;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -838,24 +869,29 @@
 			files = (
 				246C5F9F197E80DD001B73BF /* PostAuthor.m in Sources */,
 				2459A9F0197689530068F50C /* Post.m in Sources */,
-				248554ED1979346400FB788E /* NetworkConnection.m in Sources */,
 				2459A9E319764D7F0068F50C /* HomePageTableViewController.m in Sources */,
 				248553831978A8A600FB788E /* LeftView.m in Sources */,
 				2459A9BC19764D480068F50C /* AppDelegate.m in Sources */,
 				24694E57197D1C7C00DD15E4 /* PostCategory.m in Sources */,
 				246C5DF2197E282C001B73BF /* UIView+Extension.m in Sources */,
+				246FE77019D4EE4400C6AC85 /* TJRNetworkConnection.m in Sources */,
 				246C5DEC197E282C001B73BF /* MJRefreshBaseView.m in Sources */,
 				24256EAE197FDC38001128D0 /* SvGifView.m in Sources */,
 				2459AA011976AA960068F50C /* PostDetailViewController.m in Sources */,
 				2459A9ED19766F890068F50C /* CustomTableViewCell.m in Sources */,
 				246C5DF0197E282C001B73BF /* UIScrollView+Extension.m in Sources */,
 				24694E4E197CE8FC00DD15E4 /* RootViewController.m in Sources */,
+				246FE78019D4EE5200C6AC85 /* RequestBase.m in Sources */,
 				246C5DEF197E282C001B73BF /* MJRefreshHeaderView.m in Sources */,
+				246FE78C19D4F6A400C6AC85 /* RequestBase+PostsCategoryReuqest.m in Sources */,
 				246C5DED197E282C001B73BF /* MJRefreshConst.m in Sources */,
 				24672CA0197A6F5A00256DD9 /* RegexKitLite.m in Sources */,
 				246C5DF1197E282C001B73BF /* UIScrollView+MJRefresh.m in Sources */,
+				246FE78919D4F54400C6AC85 /* RequestBase+PostDetailRequest.m in Sources */,
 				247C074C197FB5D2005905AE /* DataPersistence.m in Sources */,
+				246FE78319D4EEA500C6AC85 /* RequestBase+PostsListRequest.m in Sources */,
 				247C0744197F780E005905AE /* CSNotificationView.m in Sources */,
+				246FE78619D4F1C600C6AC85 /* RequestBase+PostsCategoryWithPostIdRequest.m in Sources */,
 				246C5DEE197E282C001B73BF /* MJRefreshFooterView.m in Sources */,
 				248554E81979269400FB788E /* GTMBase64.m in Sources */,
 				2459A9B819764D480068F50C /* main.m in Sources */,

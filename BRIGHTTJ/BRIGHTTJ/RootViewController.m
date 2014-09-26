@@ -9,15 +9,14 @@
 #import "RootViewController.h"
 #import "HomePageTableViewController.h"
 #import "LeftView.h"
-#import "NetworkConnection.h"
-#import "NetworkConnectionDelegate.h"
 #import "PostCategory.h"
 #import "PostAuthor.h"
 #import <MessageUI/MessageUI.h>
+#import "RequestBase+PostsCategoryReuqest.h"
 
-#define GET_ID_IN_DICTIONARY(index) [[data allKeys] objectAtIndex:index]
+#define GET_ID_IN_DICTIONARY(index) [[result allKeys] objectAtIndex:index]
 
-@interface RootViewController () <UITableViewDelegate, UITableViewDataSource, NetworkConnectionDelegate, MFMailComposeViewControllerDelegate> {
+@interface RootViewController () <UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate> {
     
     UINavigationController *_navControlelr;
     HomePageTableViewController *_homePageTVC;
@@ -78,17 +77,29 @@
     
     [PostAuthor initAuthorInfo];
     
-    // initialize network connection
-    NetworkConnection *connection = [[NetworkConnection alloc] init];
-    // set request url
-    connection.urlString = @"http://www.brighttj.com/ios/wp-posts.php";
-    // set connection data
-    connection.postData = @{@"type": @"categories"};
-    // send request with post method
-    [connection asynchronousPOSTRequert];
-    // set NetworkConnectionDelegate delegate
-    connection.delegate = self;
-    [connection release];
+    [RequestBase requestPostCategoryWithCallback:^(NSError *error, NSMutableDictionary *result) {
+        
+        if (!error) {
+            
+            PostCategory *postCategory = [[PostCategory alloc] init];
+            postCategory.categoryId = @"0";
+            postCategory.categoryName = @"查看全部";
+            [_dataSource addObject:postCategory];
+            [postCategory release];
+            
+            for (int i = 0; i < [result allKeys].count; i ++) {
+                
+                PostCategory *postCategory = [[PostCategory alloc] init];
+                postCategory.categoryId = GET_ID_IN_DICTIONARY(i);
+                postCategory.categoryName = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"category_name"];
+                [_dataSource addObject:postCategory];
+                [postCategory release];
+            }
+            
+            // to ask update user interface with data
+            [self updateUserInterfaceWithData:result];
+        }
+    }];
 }
 
 - (void)initializeUserInterface {
@@ -268,34 +279,6 @@
             }
         }
     }
-}
-
-#pragma mark - NetworkConnectionDelegate methods
-
-- (void)recevieResponseData:(NSDictionary *)data {
-
-    PostCategory *postCategory = [[PostCategory alloc] init];
-    postCategory.categoryId = @"0";
-    postCategory.categoryName = @"查看全部";
-    [_dataSource addObject:postCategory];
-    [postCategory release];
-    
-    for (int i = 0; i < [data allKeys].count; i ++) {
-        
-        PostCategory *postCategory = [[PostCategory alloc] init];
-        postCategory.categoryId = GET_ID_IN_DICTIONARY(i);
-        postCategory.categoryName = [[data objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"category_name"];
-        [_dataSource addObject:postCategory];
-        [postCategory release];
-    }
-    
-    // to ask update user interface with data
-    [self updateUserInterfaceWithData:data];
-}
-
-- (void)networkConnectionError:(NSError *)error {
-    
-//    [self initializeDataSource];
 }
 
 - (void)updateUserInterfaceWithData:(NSDictionary *)data {
