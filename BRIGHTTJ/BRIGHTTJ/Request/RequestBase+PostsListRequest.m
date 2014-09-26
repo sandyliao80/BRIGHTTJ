@@ -14,7 +14,7 @@
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
-    [parameters setObject:@"pages" forKey:@"type"];
+    [parameters setObject:@"posts" forKey:@"type"];
     [parameters setObject:page forKey:@"page"];
     
     [self sendPostAsynchronizeRequestWithMethod:@"http://www.brighttj.com/ios/wp-posts.php" parameters:parameters callback:callback];
