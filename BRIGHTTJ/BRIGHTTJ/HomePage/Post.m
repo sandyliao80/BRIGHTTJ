@@ -103,7 +103,7 @@
  */
 - (NSString *)addBlockquoteStyleInString:(NSString *)string {
     
-    string = [string stringByReplacingOccurrencesOfString:@"<blockquote>" withString:@"<br/><br/><div style=\"background:#e3e3e3;padding:5px;\">"];
+    string = [string stringByReplacingOccurrencesOfString:@"<blockquote>" withString:@"<br/><br/><div style=\"padding:5px;border-width:1px;border-color:#e3e3e3\">"];
     string = [string stringByReplacingOccurrencesOfString:@"</blockquote>" withString:@"</div><br/>"];
     
     return string;

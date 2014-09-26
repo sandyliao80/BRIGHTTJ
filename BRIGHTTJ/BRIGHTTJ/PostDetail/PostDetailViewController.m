@@ -31,7 +31,7 @@
     
     Post *_post;
     NSString *_postContent;
-    UITextView *_textView;
+    UIWebView *_textView;
     NSMutableAttributedString *_attributedString;
     SvGifView *_gifView;
 }
@@ -74,11 +74,11 @@
     
     NSLog(@"%@我被销毁了", [self class]);
     
-//    [_gifView release];
-//    [_attributedString release];
+    [_gifView release];
+    [_attributedString release];
     [_textView release];
-//    [_postContent release];
-//    [_post release];
+    [_postContent release];
+    [_post release];
     [super dealloc];
 }
 
@@ -137,11 +137,11 @@
     self.navigationItem.rightBarButtonItem = moreBarButton;
     [moreBarButton release];
     
-    _textView = [[UITextView alloc] init];
+    _textView = [[UIWebView alloc] init];
     _textView.bounds = CGRectMake(0, 0, self.view.bounds.size.width - 10, self.view.bounds.size.height);
     _textView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
-    _textView.editable = NO; // don't allow editing
-    _textView.scrollEnabled = YES; // allow scroll
+//    _textView.editable = NO; // don't allow editing
+//    _textView.scrollEnabled = YES; // allow scroll
     _textView.autoresizingMask = UIViewAutoresizingFlexibleHeight; // auto resize
     [self.view addSubview: _textView];
     
@@ -150,7 +150,6 @@
     _gifView.backgroundColor = [UIColor clearColor];
     _gifView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.view addSubview:_gifView];
-    [_gifView release];
     
     [self configureShareParameters];
 }
@@ -257,13 +256,15 @@
  */
 - (void)updateUserInterfaceWithPostContent:(NSString *)postContent {
     
-    // set text type is html text document type
-    _attributedString = [[NSMutableAttributedString alloc] initWithData:[postContent dataUsingEncoding:NSUnicodeStringEncoding]
-                                                                                          options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
-                                                                               documentAttributes:nil
-                                                                                            error:nil];
-    _textView.attributedText = _attributedString;
+//    // set text type is html text document type
+//    _attributedString = [[NSMutableAttributedString alloc] initWithData:[postContent dataUsingEncoding:NSUnicodeStringEncoding]
+//                                                                                          options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
+//                                                                               documentAttributes:nil
+//                                                                                            error:nil];
+//    _textView.attributedText = _attributedString;
+//
     
+    [_textView loadHTMLString:postContent baseURL:nil];
     [_gifView stopGif];
 }
 

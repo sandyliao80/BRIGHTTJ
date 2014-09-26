@@ -23,6 +23,7 @@
 #import "MJRefresh.h"
 #import "CSNotificationView.h"
 #import "DataPersistence.h"
+#import "RootViewController.h"
 
 #define CELL_IDENTIFIER @"Custom"
 #define GET_ID_IN_DICTIONARY(index) [[data allKeys] objectAtIndex:index]
@@ -321,6 +322,8 @@
     
     // set cell highlight disappear
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+//    RootViewController *rootVC = (RootViewController *)self.w
 
     Post *selectedPost = (Post *)_dataSource[indexPath.row];
     PostDetailViewController *postDetailVC = [[PostDetailViewController alloc] initWithPostID:selectedPost.postID];
