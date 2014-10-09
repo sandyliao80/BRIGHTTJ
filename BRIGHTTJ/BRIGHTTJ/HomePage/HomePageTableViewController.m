@@ -101,7 +101,7 @@
  */
 - (void)initializeDataSource {
     
-    [RequestBase requestPostsListWithPage:@"1" callback:^(NSError *error, NSMutableDictionary *result) {
+    [RequestBase requestPostsListWithPage:[NSString stringWithFormat:@"%d", _page] callback:^(NSError *error, NSMutableDictionary *result) {
         
         if (!error && [result allKeys].count) {
             
@@ -116,23 +116,20 @@
                 [DataPersistence deleteAllPostsList];
             }
             
-            // package data in post object
-            for (int i = 0; i < [result allKeys].count; i ++) {
+            NSArray *posts = [result objectForKey:@"posts"];
+            
+            for (NSDictionary *value in posts) {
                 
                 Post *post = [[Post alloc] init];
-                post.postID = GET_ID_IN_DICTIONARY(i);
-                post.postTitle = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_title"];
-                post.postAuthor = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_author"];
-                post.postDate = [[result objectForKey:GET_ID_IN_DICTIONARY(i)] objectForKey:@"post_date"];
-                // add post into _dataSource
+                post.postID = [value objectForKey:@"ID"];
+                post.postTitle = [value objectForKey:@"post_title"];
+                post.postAuthor = [value objectForKey:@"post_author"];
+                post.postDate = [value objectForKey:@"post_date"];
+                
                 [_tempDataSource addObject:post];
                 [post release];
-                NSLog(@"post count 1 : %d", [post retainCount]);
             }
             
-            NSLog(@"--->category---->%d, ", _isCategoryList);
-            
-            [_tempDataSource sortUsingSelector:@selector(postIdCompare:)];
             [_dataSource addObjectsFromArray:_tempDataSource];
             
             if (!_isCategoryList) {
