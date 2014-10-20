@@ -25,6 +25,8 @@
     self.window.rootViewController = rootVC;
     [rootVC release];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     [self.window release];
     
     return YES;
