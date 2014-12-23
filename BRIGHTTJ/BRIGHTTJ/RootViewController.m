@@ -141,9 +141,9 @@
     [rightBorderView release];
     
     // 注册拖拽手势
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(processGestureReconizer:)];
-    [self.view addGestureRecognizer:pan];
-    [pan release];
+//    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(processGestureReconizer:)];
+//    [self.view addGestureRecognizer:pan];
+//    [pan release];
     
     _isLeftShow = NO; // 标记左侧view是否显示
 }

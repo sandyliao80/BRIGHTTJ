@@ -14,7 +14,7 @@
 		<string>https://github.com/saitjr/BRIGHTTJ.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BRIGHTTJ/BRIGHTTJ.xcodeproj/project.xcworkspace</string>
+	<string>BRIGHTTJ/BRIGHTTJ.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>CB5ECC84C4C4C6DC29E50C6430CF9B20F0D70110</key>

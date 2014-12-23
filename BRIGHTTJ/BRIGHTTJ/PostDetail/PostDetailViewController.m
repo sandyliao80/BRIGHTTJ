@@ -26,7 +26,7 @@
 
 #define POST_ID(index) [[result allKeys] objectAtIndex:index]
 
-@interface PostDetailViewController () <UIActionSheetDelegate> {
+@interface PostDetailViewController () <UIActionSheetDelegate, UIWebViewDelegate> {
     
     Post *_post;
     NSString *_postContent;
@@ -37,11 +37,6 @@
 
 - (void)initializeDataSource;
 - (void)initializeUserInterface;
-
-- (void)configureShareParameters;
-- (void)shareToSocialWebsites;
-
-- (void)barButtonPressed:(UIBarButtonItem *)sender;
 
 - (void)updateUserInterfaceWithPostContent:(NSString *)postContent;
 
@@ -135,15 +130,6 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // set right bar button
-    UIImage *moreImage = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForAuxiliaryExecutable:@"share.png"]];
-    UIBarButtonItem *moreBarButton = [[UIBarButtonItem alloc] initWithImage:moreImage
-                                                                      style:UIBarButtonItemStylePlain
-                                                                     target:self
-                                                                     action:@selector(barButtonPressed:)];
-    self.navigationItem.rightBarButtonItem = moreBarButton;
-    [moreBarButton release];
-    
     _textView = [[UIWebView alloc] init];
     _textView.bounds = CGRectMake(0, 0, self.view.bounds.size.width - 10, self.view.bounds.size.height);
     _textView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
@@ -158,75 +144,13 @@
     _gifView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     [self.view addSubview:_gifView];
     
-    [self configureShareParameters];
-}
-
-/**
- *  bar button trigger event
- *
- *  @param sender : the bar button who is trigger this event
- */
-- (void)barButtonPressed:(UIBarButtonItem *)sender {
-    
-    [self shareToSocialWebsites];
-}
-
-#pragma mark - Share methods
-
-- (void)configureShareParameters {
-    
-    [ShareSDK registerApp:@"568898243"];
-    
-    /**
-     连接新浪微博开放平台应用以使用相关功能，此应用需要引用SinaWeiboConnection.framework
-     http://open.weibo.com上注册新浪微博开放平台应用，并将相关信息填写到以下字段
-     **/
-    [ShareSDK connectSinaWeiboWithAppKey:@"568898243"
-                               appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
-                             redirectUri:@"http://www.sharesdk.cn"];
-    /**
-     连接QQ空间应用以使用相关功能，此应用需要引用QZoneConnection.framework
-     http://connect.qq.com/intro/login/上申请加入QQ登录，并将相关信息填写到以下字段
-     
-     如果需要实现SSO，需要导入TencentOpenAPI.framework,并引入QQApiInterface.h和TencentOAuth.h，将QQApiInterface和TencentOAuth的类型传入接口
-     **/
-    [ShareSDK connectQZoneWithAppKey:@"100371282"
-                           appSecret:@"aed9b0303e3ed1e27bae87c33761161d"
-                   qqApiInterfaceCls:[QQApiInterface class]
-                     tencentOAuthCls:[TencentOAuth class]];
-}
-
-- (void)shareToSocialWebsites {
-    
-    NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
-    
-    NSString *contentString = [NSString stringWithFormat:@"我在http://www.brighttj.com上阅读了《 %@ 》这篇文章(作者@%@)，觉得很不错，和大家分享分享。传送门：http://www.brighttj.com?p=%@", _post.postTitle, [[PostAuthor standardPostAnthorWithAuthorName:_post.postAuthor] weiboName], _post.postID];
-    
-    //构造分享内容
-    id<ISSContent> publishContent = [ShareSDK content:contentString
-                                       defaultContent:contentString
-                                                image:[ShareSDK imageWithPath:imagePath]
-                                                title:@"ShareSDK"
-                                                  url:@"http://www.sharesdk.cn"
-                                          description:contentString
-                                            mediaType:SSPublishContentMediaTypeNews];
-    
-    [ShareSDK showShareActionSheet:nil
-                         shareList:nil
-                           content:publishContent
-                     statusBarTips:YES
-                       authOptions:nil
-                      shareOptions: nil
-                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                                if (state == SSResponseStateSuccess)
-                                {
-                                    NSLog(@"分享成功");
-                                }
-                                else if (state == SSResponseStateFail)
-                                {
-                                    NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
-                                }
-                            }];
+    UIBarButtonItem *mailButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:nil];
+    self.navigationItem.rightBarButtonItem = mailButton;
+    mailButton.tag = 11;
+    [mailButton release];
 }
 
 /**
@@ -236,7 +160,7 @@
  */
 - (void)updateUserInterfaceWithPostContent:(NSString *)postContent {
     
-//    // set text type is html text document type
+    // set text type is html text document type
 //    _attributedString = [[NSMutableAttributedString alloc] initWithData:[postContent dataUsingEncoding:NSUnicodeStringEncoding]
 //                                                                                          options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType}
 //                                                                               documentAttributes:nil
@@ -245,6 +169,10 @@
 //
     
     [_textView loadHTMLString:postContent baseURL:nil];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    
     [_gifView stopGif];
 }
 
